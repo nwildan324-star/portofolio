@@ -1,0 +1,167 @@
+/* ============================================================
+   STYLE.CSS — Enchanted Forest Portfolio
+   File ini berisi semua CSS custom yang tidak bisa dicakup
+   oleh utility class Tailwind (efek 3D pintu, parallax,
+   tilt card, peti harta, dll.)
+============================================================= */
+
+html, body {
+  font-family: 'Jost', sans-serif;
+  background-color: #06140A;
+  overflow-x: hidden;
+}
+
+.font-display { font-family: 'Cinzel', serif; }
+
+/* ---------- WRAPPER UNTUK EFEK 3D PINTU ---------- */
+#door-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  perspective: 2200px; /* makin kecil = makin dramatis efek 3D-nya */
+  pointer-events: none; /* aktif lagi lewat JS saat belum terbuka penuh */
+}
+
+/* ---------- DAUN PINTU KAYU (KIRI & KANAN) ---------- */
+.door-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #5A3D24 0px, #6B4A2E 10px, #4A3320 11px, #5A3D24 22px
+    );
+  box-shadow: inset 0 10px 40px rgba(0,0,0,0.6), 0 0 60px rgba(0,0,0,0.8);
+  transform-style: preserve-3d;
+  will-change: transform;
+  border: 6px solid #2A1C10;
+}
+.door-left  { left: 0;  transform-origin: left center;  border-right: 3px solid #1A1108; }
+.door-right { right: 0; transform-origin: right center; border-left: 3px solid #1A1108; }
+
+/* Panel ukiran dekoratif di tiap daun pintu */
+.door-panel::before {
+  content: '';
+  position: absolute;
+  inset: 6%;
+  border: 4px double #D4AF37;
+  opacity: 0.35;
+  border-radius: 6px;
+}
+.door-panel::after {
+  content: '';
+  position: absolute;
+  inset: 18%;
+  border: 2px solid #D4AF37;
+  opacity: 0.2;
+  border-radius: 4px;
+}
+
+/* Gagang pintu berbentuk cincin emas */
+.door-handle {
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  border: 5px solid #D4AF37;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(212,175,55,0.7);
+}
+.door-left .door-handle  { right: 24px; transform: translateY(-50%); }
+.door-right .door-handle { left: 24px;  transform: translateY(-50%); }
+
+/* Cahaya emas yang membesar saat pintu terbuka */
+#door-light {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: radial-gradient(circle at center, rgba(243,222,154,0.85) 0%, rgba(212,175,55,0.25) 35%, rgba(0,0,0,0) 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Indikator scroll di hero */
+.scroll-hint {
+  animation: floatHint 2.2s ease-in-out infinite;
+}
+@keyframes floatHint {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(10px); opacity: 1; }
+}
+
+/* ---------- LAYER PARALLAX DEDAUNAN ---------- */
+/* Setiap layer punya data-speed berbeda -> kecepatan scroll berbeda */
+.parallax-layer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ---------- KARTU LAYANAN (SERVICES) ---------- */
+.service-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.service-card:hover {
+  transform: translateY(-10px);
+  border-color: #D4AF37;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 25px rgba(212,175,55,0.25);
+}
+.service-icon {
+  transition: transform 0.5s ease;
+}
+.service-card:hover .service-icon {
+  transform: rotate(-8deg) scale(1.15);
+}
+
+/* ---------- KARTU PORTFOLIO (TILT EFFECT) ---------- */
+.tilt-card {
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1);
+  will-change: transform;
+}
+.tilt-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 30px rgba(212,175,55,0.2);
+}
+
+/* ---------- PETI HARTA (CONTACT FORM) ---------- */
+.chest-lid {
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+}
+#chest.open .chest-lid {
+  transform: rotateX(-115deg) translateY(-10px);
+}
+.chest-body {
+  transition: box-shadow 0.6s ease;
+}
+#chest.open .chest-body {
+  box-shadow: 0 0 80px rgba(212,175,55,0.35), inset 0 0 60px rgba(212,175,55,0.15);
+}
+.chest-glow {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+#chest.open .chest-glow {
+  opacity: 1;
+}
+
+/* Garis ukiran kayu pada peti */
+.wood-texture {
+  background: repeating-linear-gradient(
+    0deg,
+    #5A3D24 0px, #6B4A2E 14px, #4A3320 16px, #5A3D24 30px
+  );
+}
+
+/* Scrollbar tipis bertema rimba */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0B1F13; }
+::-webkit-scrollbar-thumb { background: #5A3D24; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #D4AF37; }

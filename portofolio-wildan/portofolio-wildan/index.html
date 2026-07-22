@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aria Wood | Digital Marketer — Navigating the Digital Wilderness</title>
+
+<!-- ============================================================
+     GOOGLE FONTS
+     - Cinzel  : font dekoratif untuk judul (kesan "rimba kuno / ukiran kayu")
+     - Jost    : font modern untuk body text agar tetap mudah dibaca
+============================================================= -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     TAILWIND CSS via CDN
+============================================================= -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // ---------------------------------------------------------
+  // KUSTOMISASI PALET WARNA "ENCHANTED FOREST"
+  // Ubah nilai hex di sini untuk mengganti seluruh tema warna.
+  // ---------------------------------------------------------
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          forest: {
+            950: '#06140A',  // hijau hutan paling gelap (background utama)
+            900: '#0B1F13',
+            800: '#142E1C',
+            700: '#1F4A2B',
+            600: '#2F6B3D',
+            500: '#4A8A5A',
+            400: '#6FAE7E',
+          },
+          wood: {
+            950: '#2A1C10',
+            900: '#3B2A1A',  // warna pintu kayu utama
+            800: '#5A3D24',
+            700: '#7A5230',
+            600: '#9C6D3F',
+            500: '#B98850',
+          },
+          gold: {
+            300: '#F3DE9A',
+            400: '#E5C25C',
+            500: '#D4AF37',  // aksen emas utama
+            600: '#B8901F',
+          },
+          parchment: '#F1E6CC', // warna teks terang / latar form
+        },
+        fontFamily: {
+          display: ['Cinzel', 'serif'],   // gunakan: class "font-display"
+          body: ['Jost', 'sans-serif'],   // gunakan: class "font-body"
+        },
+        boxShadow: {
+          'gold-glow': '0 0 25px rgba(212, 175, 55, 0.45)',
+          'inner-deep': 'inset 0 10px 40px rgba(0,0,0,0.6)',
+        }
+      }
+    }
+  }
+</script>
+
+<!-- ============================================================
+     CSS CUSTOM (lihat folder css/)
+============================================================= -->
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="bg-forest-950 text-parchment font-body antialiased">
+
+  <!-- =========================================================
+       1. PINTU MASUK (DOOR OVERLAY)
+       Dua panel kayu menutupi seluruh layar. JS akan memutar
+       (rotateY) panel ini berdasarkan posisi scroll pertama.
+  ========================================================== -->
+  <div id="door-light"></div>
+  <div id="door-wrapper">
+    <div class="door-panel door-left">
+      <div class="door-handle"></div>
+    </div>
+    <div class="door-panel door-right">
+      <div class="door-handle"></div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       2. NAVIGASI (Sticky Nav)
+  ========================================================== -->
+  <nav class="fixed top-0 inset-x-0 z-40 backdrop-blur-md bg-forest-950/60 border-b border-gold-500/20">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#hero" class="font-display text-xl md:text-2xl text-gold-400 tracking-widest">
+        ARIA&nbsp;WOOD
+      </a>
+      <ul class="hidden md:flex items-center gap-8 font-medium text-sm uppercase tracking-wider text-parchment/80">
+        <li><a href="#about" class="nav-link hover:text-gold-400 transition-colors">Tentang</a></li>
+        <li><a href="#services" class="nav-link hover:text-gold-400 transition-colors">Layanan</a></li>
+        <li><a href="#portfolio" class="nav-link hover:text-gold-400 transition-colors">Portfolio</a></li>
+        <li>
+          <a href="#contact" class="nav-link inline-block px-5 py-2 rounded-full border border-gold-500 text-gold-400 hover:bg-gold-500 hover:text-forest-950 transition-colors">
+            Hubungi Saya
+          </a>
+        </li>
+      </ul>
+      <!-- Tombol menu mobile (opsional - sederhana) -->
+      <a href="#contact" class="md:hidden nav-link px-4 py-2 rounded-full border border-gold-500 text-gold-400 text-xs uppercase tracking-wider">
+        Kontak
+      </a>
+    </div>
+  </nav>
+
+  <!-- =========================================================
+       3. HERO SECTION — "PINTU MASUK RIMBA"
+       Latar belakang hero terdiri dari beberapa layer parallax
+       (langit, kabut, pepohonan jauh, pepohonan dekat).
+  ========================================================== -->
+  <section id="hero" class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+
+    <!-- Layer 0: Langit gradasi (statis) -->
+    <div class="absolute inset-0 bg-gradient-to-b from-forest-900 via-forest-950 to-[#04100A]"></div>
+
+    <!-- Layer 1: Kabut jauh — bergerak paling lambat (data-speed kecil) -->
+    <div class="parallax-layer top-0 h-[120%] opacity-40" data-speed="0.15">
+      <svg viewBox="0 0 1440 600" preserveAspectRatio="none" class="w-full h-full">
+        <ellipse cx="300" cy="450" rx="500" ry="150" fill="#1F4A2B" opacity="0.5"/>
+        <ellipse cx="1100" cy="500" rx="600" ry="180" fill="#1F4A2B" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- Layer 2: Siluet pohon jauh — kecepatan medium -->
+    <div class="parallax-layer bottom-0 h-[60%]" data-speed="0.3">
+      <svg viewBox="0 0 1440 400" preserveAspectRatio="none" class="w-full h-full">
+        <g fill="#142E1C">
+          <polygon points="0,400 60,200 120,400"/>
+          <polygon points="100,400 180,160 260,400"/>
+          <polygon points="240,400 320,220 400,400"/>
+          <polygon points="380,400 470,140 560,400"/>
+          <polygon points="520,400 610,200 700,400"/>
+          <polygon points="660,400 760,170 860,400"/>
+          <polygon points="820,400 900,210 980,400"/>
+          <polygon points="950,400 1050,150 1150,400"/>
+          <polygon points="1100,400 1190,200 1280,400"/>
+          <polygon points="1250,400 1350,160 1440,400"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Layer 3: Siluet pohon dekat — bergerak paling cepat (efek depth kuat) -->
+    <div class="parallax-layer bottom-0 h-[75%]" data-speed="0.5">
+      <svg viewBox="0 0 1440 500" preserveAspectRatio="none" class="w-full h-full">
+        <g fill="#0B1F13">
+          <polygon points="-40,500 80,180 200,500"/>
+          <polygon points="150,500 300,120 450,500"/>
+          <polygon points="380,500 520,200 660,500"/>
+          <polygon points="620,500 760,140 900,500"/>
+          <polygon points="850,500 1000,190 1150,500"/>
+          <polygon points="1080,500 1240,130 1400,500"/>
+          <polygon points="1300,500 1440,200 1500,500"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Konten teks hero (muncul setelah pintu terbuka) -->
+    <div id="hero-content" class="relative z-10 max-w-4xl mx-auto px-6 text-center opacity-0 translate-y-6 transition-all duration-1000 ease-out">
+      <p class="font-display text-gold-400 uppercase tracking-[0.3em] text-sm md:text-base mb-4">
+        Digital Marketer &amp; Brand Strategist
+      </p>
+      <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-parchment drop-shadow-lg">
+        Navigating the<br/>
+        <span class="text-gold-400">Digital Wilderness</span>
+      </h1>
+      <p class="mt-6 text-base md:text-lg text-parchment/80 max-w-2xl mx-auto">
+        Saya membantu brand menemukan jalur terbaik di tengah rimbanya algoritma, kanal,
+        dan persaingan digital — dari SEO hingga pertumbuhan media sosial.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#contact" class="nav-link px-8 py-3 rounded-full bg-gold-500 text-forest-950 font-semibold uppercase tracking-wider text-sm hover:bg-gold-400 transition-colors shadow-gold-glow">
+          Mulai Konsultasi
+        </a>
+        <a href="#about" class="nav-link px-8 py-3 rounded-full border border-gold-500/60 text-gold-300 font-semibold uppercase tracking-wider text-sm hover:bg-gold-500/10 transition-colors">
+          Jelajahi Cerita Saya
+        </a>
+      </div>
+    </div>
+
+    <!-- Petunjuk scroll -->
+    <div class="scroll-hint absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-gold-300">
+      <span class="text-xs uppercase tracking-[0.25em]">Scroll untuk membuka pintu</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-8" viewBox="0 0 24 36" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="1" width="20" height="34" rx="10"/>
+        <circle cx="12" cy="10" r="2" fill="currentColor"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       4. ABOUT SECTION — "SANG PEMANDU"
+  ========================================================== -->
+  <section id="about" class="relative py-24 md:py-36 bg-forest-900 overflow-hidden">
+
+    <!-- Layer parallax dedaunan di bagian about -->
+    <div class="parallax-layer -top-10 h-[140%] opacity-30 pointer-events-none" data-speed="-0.1">
+      <svg viewBox="0 0 1440 600" preserveAspectRatio="none" class="w-full h-full">
+        <g fill="#2F6B3D">
+          <circle cx="120" cy="80" r="140"/>
+          <circle cx="1300" cy="150" r="180"/>
+          <circle cx="700" cy="40" r="120"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <!-- Foto / ilustrasi -->
+      <div class="relative">
+        <div class="aspect-[4/5] rounded-2xl border-4 border-gold-500/30 bg-forest-800 overflow-hidden shadow-2xl">
+          <!-- GANTI file assets/images/profile.jpg dengan foto profil Anda (format .webp disarankan) -->
+          <img src="assets/images/profile.jpg" alt="Foto Profil Aria Wood" class="w-full h-full object-cover" />
+        </div>
+        <!-- Aksen ukiran kayu -->
+        <div class="absolute -bottom-6 -right-6 w-28 h-28 rounded-full bg-gold-500/10 border border-gold-500/40 backdrop-blur-sm flex items-center justify-center font-display text-gold-400 text-center text-xs leading-tight p-2">
+          5+ Tahun<br/>di Rimba Digital
+        </div>
+      </div>
+
+      <!-- Teks cerita -->
+      <div>
+        <p class="font-display text-gold-400 uppercase tracking-[0.3em] text-sm mb-3">Tentang Saya</p>
+        <h2 class="font-display text-3xl md:text-5xl font-bold mb-6 leading-tight">
+          Memandu Brand Melewati Rimba Digital
+        </h2>
+        <p class="text-parchment/80 leading-relaxed mb-4">
+          Setiap bisnis yang masuk ke dunia digital seperti melangkah ke dalam hutan lebat —
+          penuh peluang, tetapi juga penuh jalan buntu. Sebagai Digital Marketer, peran saya
+          adalah menjadi pemandu: memetakan jalur, membersihkan semak algoritma, dan
+          menuntun brand Anda menuju cahaya — yaitu pertumbuhan yang terukur.
+        </p>
+        <p class="text-parchment/80 leading-relaxed mb-6">
+          Selama lebih dari 5 tahun, saya telah membantu puluhan bisnis — dari startup
+          kecil hingga brand nasional — menemukan suara mereka, menaikkan peringkat
+          pencarian, dan membangun komunitas yang loyal di media sosial.
+        </p>
+
+        <!-- Statistik kecil -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+          <div class="text-center p-4 rounded-xl bg-forest-800/60 border border-gold-500/20">
+            <p class="font-display text-2xl md:text-3xl text-gold-400 font-bold">50+</p>
+            <p class="text-xs uppercase tracking-wider text-parchment/60 mt-1">Proyek</p>
+          </div>
+          <div class="text-center p-4 rounded-xl bg-forest-800/60 border border-gold-500/20">
+            <p class="font-display text-2xl md:text-3xl text-gold-400 font-bold">3.2x</p>
+            <p class="text-xs uppercase tracking-wider text-parchment/60 mt-1">Rata-rata ROI</p>
+          </div>
+          <div class="text-center p-4 rounded-xl bg-forest-800/60 border border-gold-500/20">
+            <p class="font-display text-2xl md:text-3xl text-gold-400 font-bold">98%</p>
+            <p class="text-xs uppercase tracking-wider text-parchment/60 mt-1">Klien Puas</p>
+          </div>
+        </div>
+
+        <a href="#services" class="nav-link inline-block px-8 py-3 rounded-full bg-gold-500 text-forest-950 font-semibold uppercase tracking-wider text-sm hover:bg-gold-400 transition-colors">
+          Lihat Layanan Saya
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       5. SERVICES SECTION — "PERALATAN SANG PEMANDU"
+  ========================================================== -->
+  <section id="services" class="relative py-24 md:py-36 bg-forest-950 overflow-hidden">
+
+    <!-- Layer parallax kabut emas tipis -->
+    <div class="parallax-layer top-0 h-full opacity-20 pointer-events-none" data-speed="0.2">
+      <svg viewBox="0 0 1440 800" preserveAspectRatio="none" class="w-full h-full">
+        <ellipse cx="720" cy="0" rx="900" ry="300" fill="#D4AF37" opacity="0.3"/>
+      </svg>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="font-display text-gold-400 uppercase tracking-[0.3em] text-sm mb-3">Layanan</p>
+        <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">
+          Empat Jalur Menuju Pertumbuhan
+        </h2>
+        <p class="text-parchment/70">
+          Setiap layanan adalah jalur berbeda menuju tujuan yang sama: brand Anda
+          ditemukan, dipercaya, dan dipilih.
+        </p>
+      </div>
+
+      <!-- Grid kartu layanan -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Card 1: SEO -->
+        <div class="service-card p-8 rounded-2xl bg-forest-900 border border-gold-500/15">
+          <div class="service-icon w-14 h-14 rounded-full bg-gold-500/10 border border-gold-500/40 flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="21" y1="21" x2="16.5" y2="16.5"/>
+              <path d="M11 7v4l2 2"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold mb-3 text-parchment">SEO Optimization</h3>
+          <p class="text-sm text-parchment/70 leading-relaxed mb-4">
+            Memetakan jalur tersembunyi agar mesin pencari menemukan brand Anda lebih
+            cepat — riset kata kunci, optimasi on-page, dan strategi backlink organik.
+          </p>
+          <a href="#contact" class="nav-link text-xs uppercase tracking-widest text-gold-400 hover:text-gold-300">
+            Pelajari Lebih Lanjut →
+          </a>
+        </div>
+
+        <!-- Card 2: SEM -->
+        <div class="service-card p-8 rounded-2xl bg-forest-900 border border-gold-500/15">
+          <div class="service-icon w-14 h-14 rounded-full bg-gold-500/10 border border-gold-500/40 flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold mb-3 text-parchment">SEM &amp; Paid Ads</h3>
+          <p class="text-sm text-parchment/70 leading-relaxed mb-4">
+            Membuka jalur cepat melalui kanopi hutan — kampanye Google &amp; Meta Ads
+            yang ditargetkan untuk hasil instan dengan biaya efisien.
+          </p>
+          <a href="#contact" class="nav-link text-xs uppercase tracking-widest text-gold-400 hover:text-gold-300">
+            Pelajari Lebih Lanjut →
+          </a>
+        </div>
+
+        <!-- Card 3: Content Strategy -->
+        <div class="service-card p-8 rounded-2xl bg-forest-900 border border-gold-500/15">
+          <div class="service-icon w-14 h-14 rounded-full bg-gold-500/10 border border-gold-500/40 flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 3v18M12 3c-4 1-7 4-7 8s3 7 7 8M12 3c4 1 7 4 7 8s-3 7-7 8"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold mb-3 text-parchment">Content Strategy</h3>
+          <p class="text-sm text-parchment/70 leading-relaxed mb-4">
+            Menanam benih cerita yang tumbuh menjadi kepercayaan — perencanaan konten,
+            copywriting, dan kalender editorial yang konsisten.
+          </p>
+          <a href="#contact" class="nav-link text-xs uppercase tracking-widest text-gold-400 hover:text-gold-300">
+            Pelajari Lebih Lanjut →
+          </a>
+        </div>
+
+        <!-- Card 4: Social Media Growth -->
+        <div class="service-card p-8 rounded-2xl bg-forest-900 border border-gold-500/15">
+          <div class="service-icon w-14 h-14 rounded-full bg-gold-500/10 border border-gold-500/40 flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="6" r="3"/>
+              <circle cx="18" cy="18" r="3"/>
+              <line x1="8.6" y1="13.2" x2="15.4" y2="17"/>
+              <line x1="8.6" y1="10.8" x2="15.4" y2="7"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-semibold mb-3 text-parchment">Social Media Growth</h3>
+          <p class="text-sm text-parchment/70 leading-relaxed mb-4">
+            Menghubungkan setiap "pohon" menjadi satu ekosistem yang ramai —
+            pengelolaan komunitas, kolaborasi, dan strategi viral organik.
+          </p>
+          <a href="#contact" class="nav-link text-xs uppercase tracking-widest text-gold-400 hover:text-gold-300">
+            Pelajari Lebih Lanjut →
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       6. PORTFOLIO / CASE STUDIES — dengan efek tilt 3D
+  ========================================================== -->
+  <section id="portfolio" class="relative py-24 md:py-36 bg-forest-900 overflow-hidden">
+
+    <!-- Layer parallax pohon dekat di bagian portfolio -->
+    <div class="parallax-layer bottom-0 h-[50%] opacity-25 pointer-events-none" data-speed="0.35">
+      <svg viewBox="0 0 1440 300" preserveAspectRatio="none" class="w-full h-full">
+        <g fill="#0B1F13">
+          <polygon points="0,300 100,100 200,300"/>
+          <polygon points="300,300 420,80 540,300"/>
+          <polygon points="650,300 760,120 870,300"/>
+          <polygon points="980,300 1100,90 1220,300"/>
+          <polygon points="1250,300 1380,110 1440,300"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="font-display text-gold-400 uppercase tracking-[0.3em] text-sm mb-3">Portfolio</p>
+        <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">
+          Jejak Langkah di Rimba Digital
+        </h2>
+        <p class="text-parchment/70">
+          Beberapa cerita keberhasilan dari klien yang berhasil saya pandu menuju
+          pertumbuhan nyata. Arahkan kursor pada kartu untuk melihat lebih dekat.
+        </p>
+      </div>
+
+      <!-- Grid kartu portfolio dengan efek tilt -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Case Study 1 -->
+        <div class="tilt-card rounded-2xl overflow-hidden bg-forest-800 border border-gold-500/15">
+          <!-- GANTI file assets/images/project-1.jpg dengan screenshot/foto proyek (.webp) -->
+          <img src="assets/images/project-1.jpg" alt="Studi Kasus Brand Kopi Lokal" class="w-full h-48 object-cover" />
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-widest text-gold-400 mb-2">SEO &amp; Content</p>
+            <h3 class="font-display text-xl font-semibold mb-2">Brand Kopi Lokal "Akar Nusantara"</h3>
+            <p class="text-sm text-parchment/70 mb-4">
+              Meningkatkan trafik organik dengan strategi konten berbasis cerita asal-usul biji kopi.
+            </p>
+            <p class="font-display text-gold-400 text-lg font-bold">+185% Trafik Organik</p>
+          </div>
+        </div>
+
+        <!-- Case Study 2 -->
+        <div class="tilt-card rounded-2xl overflow-hidden bg-forest-800 border border-gold-500/15">
+          <!-- GANTI file assets/images/project-2.jpg dengan screenshot/foto proyek (.webp) -->
+          <img src="assets/images/project-2.jpg" alt="Studi Kasus Fashion Brand" class="w-full h-48 object-cover" />
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-widest text-gold-400 mb-2">SEM &amp; Paid Ads</p>
+            <h3 class="font-display text-xl font-semibold mb-2">Fashion Brand "Cendana Wear"</h3>
+            <p class="text-sm text-parchment/70 mb-4">
+              Kampanye iklan terarah yang menurunkan biaya akuisisi pelanggan secara signifikan.
+            </p>
+            <p class="font-display text-gold-400 text-lg font-bold">-42% Cost per Acquisition</p>
+          </div>
+        </div>
+
+        <!-- Case Study 3 -->
+        <div class="tilt-card rounded-2xl overflow-hidden bg-forest-800 border border-gold-500/15">
+          <!-- GANTI file assets/images/project-3.jpg dengan screenshot/foto proyek (.webp) -->
+          <img src="assets/images/project-3.jpg" alt="Studi Kasus Komunitas Outdoor" class="w-full h-48 object-cover" />
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-widest text-gold-400 mb-2">Social Media Growth</p>
+            <h3 class="font-display text-xl font-semibold mb-2">Komunitas Outdoor "Rimba Trail"</h3>
+            <p class="text-sm text-parchment/70 mb-4">
+              Membangun komunitas Instagram dari nol menjadi ekosistem yang sangat aktif.
+            </p>
+            <p class="font-display text-gold-400 text-lg font-bold">120K Followers dalam 8 Bulan</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       7. CONTACT SECTION — "PETI HARTA TERSEMBUNYI"
+  ========================================================== -->
+  <section id="contact" class="relative py-24 md:py-40 bg-forest-950 overflow-hidden">
+
+    <!-- Layer parallax cahaya emas dari atas -->
+    <div class="parallax-layer top-0 h-full opacity-25 pointer-events-none" data-speed="0.25">
+      <svg viewBox="0 0 1440 800" preserveAspectRatio="none" class="w-full h-full">
+        <ellipse cx="720" cy="0" rx="700" ry="400" fill="#E5C25C" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <p class="font-display text-gold-400 uppercase tracking-[0.3em] text-sm mb-3">Kontak</p>
+      <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">
+        Buka Peti, Mulai Petualangan
+      </h2>
+      <p class="text-parchment/70 mb-12">
+        Klik peti di bawah untuk membuka formulir kontak. Ceritakan tantangan bisnis
+        Anda, dan mari kita temukan jalan keluar dari rimba digital bersama.
+      </p>
+
+      <!-- ====== PETI HARTA / TREASURE CHEST ====== -->
+      <div id="chest" class="relative max-w-xl mx-auto select-none" style="perspective:1500px;">
+
+        <!-- Aura cahaya saat peti terbuka -->
+        <div class="chest-glow absolute -inset-10 rounded-full bg-gold-400/20 blur-3xl pointer-events-none"></div>
+
+        <!-- Tutup peti (lid) - klik untuk buka/tutup, diatur di js/script.js -->
+        <div class="chest-lid relative z-20 wood-texture rounded-t-3xl border-4 border-gold-600 h-24 md:h-28 flex items-center justify-center shadow-xl cursor-pointer">
+          <div class="w-16 h-6 rounded-full border-2 border-gold-400 bg-forest-950/40"></div>
+        </div>
+
+        <!-- Badan peti + form (chest body) -->
+        <div class="chest-body relative z-10 wood-texture rounded-b-3xl border-4 border-t-0 border-gold-600 p-6 md:p-10 -mt-2">
+          <form id="contact-form" class="space-y-4 text-left">
+            <div>
+              <label for="name" class="block text-xs uppercase tracking-widest text-gold-300 mb-1">Nama</label>
+              <input type="text" id="name" name="name" required
+                class="w-full px-4 py-3 rounded-lg bg-forest-950/70 border border-gold-500/30 text-parchment placeholder-parchment/40 focus:outline-none focus:border-gold-400"
+                placeholder="Nama lengkap Anda" />
+            </div>
+            <div>
+              <label for="email" class="block text-xs uppercase tracking-widest text-gold-300 mb-1">Email</label>
+              <input type="email" id="email" name="email" required
+                class="w-full px-4 py-3 rounded-lg bg-forest-950/70 border border-gold-500/30 text-parchment placeholder-parchment/40 focus:outline-none focus:border-gold-400"
+                placeholder="nama@email.com" />
+            </div>
+            <div>
+              <label for="message" class="block text-xs uppercase tracking-widest text-gold-300 mb-1">Pesan</label>
+              <textarea id="message" name="message" rows="4" required
+                class="w-full px-4 py-3 rounded-lg bg-forest-950/70 border border-gold-500/30 text-parchment placeholder-parchment/40 focus:outline-none focus:border-gold-400 resize-none"
+                placeholder="Ceritakan tentang proyek atau tantangan bisnis Anda..."></textarea>
+            </div>
+            <button type="submit"
+              class="w-full py-3 rounded-lg bg-gold-500 text-forest-950 font-semibold uppercase tracking-wider text-sm hover:bg-gold-400 transition-colors shadow-gold-glow">
+              Kirim Pesan ke Sang Pemandu
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <p class="mt-8 text-xs text-parchment/40">* Klik bagian atas peti untuk membuka / menutup formulir.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       8. FOOTER
+  ========================================================== -->
+  <footer class="relative py-10 bg-forest-950 border-t border-gold-500/10">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+      <p class="font-display text-gold-400 tracking-widest">ARIA WOOD</p>
+      <p class="text-xs text-parchment/50">© 2026 Aria Wood. Navigating the Digital Wilderness, one brand at a time.</p>
+      <div class="flex gap-4 text-parchment/60 text-sm">
+        <a href="#" class="hover:text-gold-400 transition-colors">LinkedIn</a>
+        <a href="#" class="hover:text-gold-400 transition-colors">Instagram</a>
+        <a href="#" class="hover:text-gold-400 transition-colors">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT (lihat folder js/)
+  ============================================================= -->
+  <script src="js/script.js"></script>
+</body>
+</html>
